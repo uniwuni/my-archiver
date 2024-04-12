@@ -21,15 +21,6 @@ maintainer:         uniwuni@protonmail.com
 -- category:
 extra-source-files: CHANGELOG.md
 
-source-repository-package
-  type: git
-  location: git://github.com/pjones/byline.git
-
-source-repository-package
-  type: git
-  location: git://github.com/uniwuni/hsparql.git
-
-
 executable my-archiver
     main-is:          Main.hs
 

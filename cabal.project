@@ -1,0 +1,10 @@
+packages: .
+optimization: 2
+
+source-repository-package
+  type: git
+  location: https://github.com/uniwuni/byline.git
+
+source-repository-package
+  type: git
+  location: https://github.com/uniwuni/hsparql.git
