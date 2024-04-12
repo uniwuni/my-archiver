@@ -326,24 +326,26 @@ addMusic cfg = do
           No -> lift $ updateQuery (updateEndpoint cfg) $ musicalWorkAdd expr work False
           Skip -> return True)
 
-artistAddByName :: Config -> TrackJSONInfo -> IO RDF.Node
-artistAddByName cfg info = do
-  r <- Y.channelExistsSelect' cfg (uploader_url info)
-  case r of
-    Nothing -> runBylineT (uploaderAdd'' (uploader info)) >>= (maybe (error "Couldn't choose uploader!") (pure . RDF.UNode))
-    Just iri -> pure iri
-  where artistAdd name = do
-          sayLn $ text $ "Query: " <> name
-          sayLn $ text $ "Song: " <> title info
-          res <- chooseFromSelect cfg (agentSelect name) "Choose an agent:"
-          case res of
-            OtherQuery -> do searchTerm <- askLn (text "Agent search term: ") (Just name)
-                             uploaderAdd'' searchTerm
-            MakeNew ->
-              do res <- lift $ updateQuery (updateEndpoint cfg) (uploaderAdd info soundcloudAccountAdd)
-                 if res then pure ("https://uniwuni.github.io/archives#" <> encodeText (uploader info)  <> "-" <> T.drop 23 (uploader_url info) <> "-sc") else error ("Adding uploader for " ++ show info ++ " failed!")
-            Result (Match (Bound (RDF.UNode a):_ )) -> do
-              b <- lift $ updateQuery (updateEndpoint cfg) $ soundcloudAccountAdd info $ iriRef a
-              if b then pure a else lift $ error "Something bad happened!"
-            Result (Match _) -> lift (putStrLn "Incorrect type!") >> uploaderAdd'' name
-            Result (Other text) -> lift (putStrLn "Very unlikely that this is what you want!") >> uploaderAdd'' name
+#artistAddByName :: Config -> TrackJSONInfo -> IO RDF.Node
+#artistAddByName cfg info = do
+#  r <- Y.channelExistsSelect' cfg (uploader_url info)
+#  case r of
+#    Nothing -> runBylineT (uploaderAdd'' (uploader info)) >>= (maybe (error "Couldn't choose uploader!") (pure . RDF.UNode))
+#    Just iri -> pure iri
+#  where artistAdd name = do
+#          sayLn $ text $ "Query: " <> name
+#          sayLn $ text $ "Song: " <> title info
+#          res <- chooseFromSelect cfg (agentSelect name) "Choose an agent:"
+#          case res of
+#            OtherQuery -> do searchTerm <- askLn (text "Agent search term: ") (Just name)
+#                             uploaderAdd'' searchTerm
+#            MakeNew ->
+#              do res <- lift $ updateQuery (updateEndpoint cfg) (uploaderAdd info soundcloudAccountAdd)
+#                 if res then pure ("https://uniwuni.github.io/archives#" <> encodeText (uploader info)  <> "-" <> T.drop 23 (uploader_url info) <> "-sc") else error ("Adding uploader for " ++ show info ++ " failed!")
+#            Result (Match (Bound (RDF.UNode a):_ )) -> do
+#              b <- lift $ updateQuery (updateEndpoint cfg) $ soundcloudAccountAdd info $ iriRef a
+#              if b then pure a else lift $ error "Something bad happened!"
+#            Result (Match _) -> lift (putStrLn "Incorrect type!") >> uploaderAdd'' name
+#            Result (Other text) -> lift (putStrLn "Very unlikely that this is what you want!") >> uploaderAdd'' name
+#
+#
